@@ -4,7 +4,7 @@ const CONFIG = {
   remainingSlots: 7,
   // 기존 촬영 합계와 tobebrander 가격
   oldTotal: 3000000,
-  newTotal: 399000,
+  newTotal: 399900,
   // 기존 촬영 7단계별 비용 (원). 합이 oldTotal과 같아야 한다. ※ 임시값 — 확정 필요
   stepCosts: [300000, 600000, 400000, 700000, 300000, 300000, 400000],
   // 상담 폼 접수 주소 (예: Formspree, Google Apps Script). 비어 있으면 전송하지 않는다.
@@ -18,7 +18,7 @@ const won = (n) => n.toLocaleString("ko-KR") + "원";
 document.querySelectorAll("[data-slots]").forEach((el) => (el.textContent = CONFIG.remainingSlots));
 
 // ----- 스크롤 비용 비교 -----
-// 단계: 0 대기 → 1 목록 타이핑 + 3,000,000원 → 2 제목이 tobebrander는 → 3 1~2만 남고 399,000원
+// 단계: 0 대기 → 1 목록 타이핑 + 3,000,000원 → 2 제목이 tobebrander는 → 3 1~2만 남고 399,900원
 // 숫자는 스크롤 양에 묶지 않고, 단계에 들어설 때 한 번 재생된다.
 const versus = document.getElementById("versus");
 const rows = [...versus.querySelectorAll(".row")];
