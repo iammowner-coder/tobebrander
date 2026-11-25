@@ -5,8 +5,8 @@ const CONFIG = {
   // 기존 촬영 합계와 tobebrander 가격
   oldTotal: 3000000,
   newTotal: 399000,
-  // 기존 촬영 단계별 비용 (원). 정해지면 숫자를 넣는다. null이면 금액을 표시하지 않는다.
-  stepCosts: [null, null, null, null, null, null, null],
+  // 기존 촬영 7단계별 비용 (원). 합이 oldTotal과 같아야 한다. ※ 임시값 — 확정 필요
+  stepCosts: [300000, 600000, 400000, 700000, 300000, 300000, 400000],
   // 상담 폼 접수 주소 (예: Formspree, Google Apps Script). 비어 있으면 전송하지 않는다.
   formEndpoint: "",
 };
@@ -17,50 +17,117 @@ const won = (n) => n.toLocaleString("ko-KR") + "원";
 // 잔여 구좌
 document.querySelectorAll("[data-slots]").forEach((el) => (el.textContent = CONFIG.remainingSlots));
 
-// 단계별 비용
-document.querySelectorAll("[data-cost]").forEach((el, i) => {
-  const v = CONFIG.stepCosts[i];
-  el.textContent = v == null ? "" : won(v);
-});
-document.querySelector(".total-old").textContent = won(CONFIG.oldTotal);
-
 // ----- 스크롤 비용 비교 -----
+// 단계: 0 대기 → 1 목록 타이핑 + 3,000,000원 → 2 제목이 tobebrander는 → 3 1~2만 남고 399,000원
+// 숫자는 스크롤 양에 묶지 않고, 단계에 들어설 때 한 번 재생된다.
 const versus = document.getElementById("versus");
-const rows = [...versus.querySelectorAll(".row.old")];
-const total = document.getElementById("total");
+const rows = [...versus.querySelectorAll(".row")];
+const totalEl = document.getElementById("total");
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-function render(p) {
-  // p: 0 → 1. 0.08~0.64 구간에서 일곱 단계를 차례로 지운다.
-  const start = 0.08, step = 0.08;
-  let struck = 0;
-  rows.forEach((r, i) => {
-    const on = p > start + i * step;
-    r.classList.toggle("strike", on);
-    if (on) struck++;
+// 슬롯머신처럼 숫자를 굴리다가 왼쪽 자리부터 멈춘다
+const rolls = new WeakMap();
+function roll(el, target, { duration = 700, suffix = "원" } = {}) {
+  const prev = rolls.get(el); if (prev) clearInterval(prev);
+  const final = target.toLocaleString("ko-KR");
+  if (reduce) { el.textContent = final + suffix; return Promise.resolve(); }
+  const digitIdx = [...final].map((ch, k) => (/\d/.test(ch) ? k : -1)).filter((k) => k >= 0);
+  const start = performance.now();
+  return new Promise((resolve) => {
+    const id = setInterval(() => {
+      const t = Math.min(1, (performance.now() - start) / duration);
+      const settled = Math.floor(t * digitIdx.length);
+      const out = [...final].map((ch, k) => {
+        const pos = digitIdx.indexOf(k);
+        if (pos < 0 || pos < settled) return ch;
+        return String(Math.floor(Math.random() * 10));
+      });
+      el.textContent = out.join("") + suffix;
+      if (t >= 1) { clearInterval(id); el.textContent = final + suffix; resolve(); }
+    }, 40);
+    rolls.set(el, id);
   });
-  const done = p > 0.72;
-  versus.classList.toggle("done", done);
-  const value = done
-    ? CONFIG.newTotal
-    : Math.round((CONFIG.oldTotal - (struck / rows.length) * (CONFIG.oldTotal - CONFIG.newTotal)) / 1000) * 1000;
-  total.textContent = won(value);
+}
+
+async function type(el, text, speed = 28) {
+  if (reduce) { el.textContent = text; return; }
+  el.textContent = "";
+  el.classList.add("typing");
+  for (const ch of text) { el.textContent += ch; await wait(speed); }
+  el.classList.remove("typing");
+}
+
+function swapText(el, text) {
+  el.textContent = text;
+  el.classList.remove("swap"); void el.offsetWidth; el.classList.add("swap");
+}
+
+let stage = 0;
+let typed = false;
+
+async function playList() {
+  typed = true;
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    r.classList.add("in");
+    await type(r.querySelector(".t"), r.dataset.text);
+    // 타이핑 도중 이미 3단계로 내려왔다면 1~2번 줄은 바뀐 내용으로 맞춘다
+    if (stage >= 3 && i < 2) {
+      swapText(r.querySelector(".t"), r.dataset.new);
+      r.querySelector(".c").textContent = "✓";
+    } else {
+      roll(r.querySelector(".c"), CONFIG.stepCosts[i] ?? 0, { duration: 450 });
+    }
+    await wait(reduce ? 0 : 60);
+  }
+  await wait(reduce ? 0 : 300);
+  roll(totalEl, stage >= 3 ? CONFIG.newTotal : CONFIG.oldTotal, { duration: 900 });
+}
+
+function setStage(next) {
+  if (next === stage) return;
+  const from = stage;
+  stage = next;
+  versus.classList.toggle("s2", next >= 2);
+  versus.classList.toggle("s3", next >= 3);
+
+  if (next >= 1 && !typed) { playList(); }
+
+  // 1~2번 줄 글자와 금액 바꾸기
+  if (next >= 3 && from < 3) {
+    rows.slice(0, 2).forEach((r) => { swapText(r.querySelector(".t"), r.dataset.new); r.querySelector(".c").textContent = "✓"; });
+    roll(totalEl, CONFIG.newTotal, { duration: 900 });
+  }
+  if (next < 3 && from >= 3) {
+    rows.slice(0, 2).forEach((r, i) => {
+      swapText(r.querySelector(".t"), r.dataset.text);
+      roll(r.querySelector(".c"), CONFIG.stepCosts[i] ?? 0, { duration: 400 });
+    });
+    roll(totalEl, CONFIG.oldTotal, { duration: 900 });
+  }
+}
+
+function update() {
+  const rect = versus.getBoundingClientRect();
+  const range = versus.offsetHeight - window.innerHeight;
+  const p = Math.min(1, Math.max(0, -rect.top / range));
+  let s = 0;
+  if (rect.top < window.innerHeight * 0.35) s = 1; // 영역에 들어서면
+  if (p > 0.38) s = 2;
+  if (p > 0.68) s = 3;
+  setStage(s);
 }
 
 if (reduce) {
-  rows.forEach((r) => r.classList.add("strike"));
-  render(1);
+  // 움직임 줄이기: 최종 상태만 보여 준다
+  rows.forEach((r, i) => { r.classList.add("in"); r.querySelector(".t").textContent = r.dataset.text; });
+  typed = true;
+  setStage(3);
 } else {
   let ticking = false;
-  const update = () => {
-    const rect = versus.getBoundingClientRect();
-    const range = versus.offsetHeight - window.innerHeight;
-    const p = Math.min(1, Math.max(0, -rect.top / range));
-    render(p);
-    ticking = false;
-  };
   window.addEventListener("scroll", () => {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    if (!ticking) { requestAnimationFrame(() => { update(); ticking = false; }); ticking = true; }
   }, { passive: true });
   window.addEventListener("resize", update);
   update();

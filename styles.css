@@ -118,47 +118,54 @@ h1, h2 {
 .promo-left { font-size: 15px; color: var(--b300); }
 .promo-left b { color: var(--white); }
 
-/* VERSUS: 스크롤 비용 비교 */
-.versus { height: 320vh; margin-top: 140px; background: var(--b100); }
+/* VERSUS: 단계별로 재생되는 비용 비교 */
+.versus { height: 340vh; margin-top: 140px; background: var(--b100); }
 .versus-sticky { position: sticky; top: 68px; height: calc(100vh - 68px); display: flex; align-items: center; overflow: hidden; }
-.versus-in { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; position: relative; }
-.versus-label { font-size: 15px; font-weight: 600; color: var(--b400); }
-.versus-title { margin-top: 16px; }
-.versus .lbl-new { display: none; }
-.versus.done .lbl-old { display: none; }
-.versus.done .lbl-new { display: inline; }
-.versus.done .versus-label { color: var(--b800); }
+.versus-in { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+
+.versus-head { display: grid; }
+.head-old, .head-new { grid-area: 1 / 1; transition: opacity .6s ease, transform .6s ease; }
+.head-new { opacity: 0; transform: translateY(24px); }
+.versus.s2 .head-old { opacity: 0; transform: translateY(-24px); }
+.versus.s2 .head-new { opacity: 1; transform: none; }
+.versus-label { font-size: clamp(18px, 2vw, 24px); font-weight: 600; color: var(--b400); }
+.versus-title { margin-top: 16px; font-size: clamp(36px, 5.4vw, 64px); }
+.versus-brand { font-family: var(--en); font-size: clamp(44px, 6.4vw, 80px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.1; }
 
 .ledger { background: var(--white); border-radius: 24px; padding: 12px 28px 24px; }
 .ledger-list { list-style: none; }
 .row {
-  display: grid; grid-template-columns: 44px 1fr auto; align-items: center;
+  display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 8px;
   font-size: 17px; border-bottom: 1px solid var(--b200);
-  max-height: 64px; padding: 16px 0; overflow: hidden;
-  transition: opacity .35s ease, color .35s ease, max-height .5s ease, padding .5s ease, border-color .5s ease;
+  max-height: 66px; padding: 16px 0; overflow: hidden;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .25s ease, transform .25s ease, max-height .6s ease, padding .6s ease, border-color .6s ease;
 }
+.row.in { opacity: 1; transform: none; }
 .row .n { font-family: var(--en); font-size: 14px; color: var(--b500); }
-.row .t { font-weight: 600; position: relative; width: fit-content; }
-.row .c { font-family: var(--en); color: var(--b400); font-size: 15px; }
-.row .t::after {
-  content: ""; position: absolute; left: -2px; right: -2px; top: 50%; height: 2px;
-  background: var(--b800); transform: scaleX(0); transform-origin: left; transition: transform .35s ease;
-}
-.row.old.strike { color: var(--b300); }
-.row.old.strike .t::after { transform: scaleX(1); background: var(--b400); }
-.row.new { max-height: 0; padding: 0; opacity: 0; border-color: transparent; }
-.versus.done .row.old { max-height: 0; padding: 0; opacity: 0; border-color: transparent; }
-.versus.done .row.new { max-height: 64px; padding: 20px 0; opacity: 1; border-color: var(--b200); font-size: 20px; }
-.versus.done .row.new .c { color: var(--b800); }
+.row .t { font-weight: 600; min-height: 1.5em; }
+.row .t.typing::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; background: var(--b800); vertical-align: -2px; animation: caret .5s steps(1) infinite; }
+@keyframes caret { 50% { opacity: 0; } }
+.row .c, .total { font-family: var(--en); font-variant-numeric: tabular-nums; }
+.row .c { color: var(--b400); font-size: 16px; }
+.row .t.swap { animation: swap .5s ease; }
+@keyframes swap { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: none; } }
+.versus.s3 .row.fold { max-height: 0; padding: 0; opacity: 0; border-color: transparent; }
+.versus.s3 .row { font-size: 20px; }
+.versus.s3 .row .c { color: var(--b800); }
 
 .ledger-total { display: flex; justify-content: space-between; align-items: baseline; padding-top: 20px; }
-.ledger-total > span:first-child { font-size: 15px; font-weight: 600; color: var(--b400); }
-.total-wrap { display: flex; flex-direction: column; align-items: flex-end; }
-.total { font-family: var(--en); font-size: clamp(30px, 4vw, 44px); font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
-.total-old { font-family: var(--en); font-size: 15px; color: var(--b500); height: 0; opacity: 0; transition: opacity .4s ease; }
-.versus.done .total-old { height: auto; opacity: 1; }
-.versus-hint { position: absolute; left: 0; bottom: -64px; font-size: 13px; color: var(--b500); transition: opacity .3s; }
-.versus.done .versus-hint { opacity: 0; }
+.ledger-total > span { font-size: 15px; font-weight: 600; color: var(--b400); }
+.total { font-size: clamp(30px, 4vw, 44px); font-weight: 600; letter-spacing: -0.03em; }
+
+/* 프로모션 한정 구좌 칩 */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 24px;
+  border: 1px solid var(--b300); border-radius: 999px; padding: 8px 16px;
+  font-size: 14px; font-weight: 600; color: var(--b800); background: var(--white);
+  transition: background .15s ease, border-color .15s ease;
+}
+.chip:hover { background: var(--b100); border-color: var(--b800); }
 
 /* PRICING CARDS (브랜더진식 큰 회색 카드) */
 .cards { display: flex; flex-direction: column; gap: 16px; }
@@ -261,7 +268,6 @@ details p { margin-top: 12px; font-size: 15px; line-height: 1.6; color: var(--b4
   .card { grid-template-columns: 1fr; }
   .team-grid { grid-template-columns: repeat(2, 1fr); }
   .versus-in { grid-template-columns: 1fr; gap: 28px; }
-  .versus-title { font-size: clamp(28px, 6vw, 40px); }
 }
 @media (max-width: 640px) {
   .wrap, .narrow { width: calc(100% - 32px); }
@@ -275,8 +281,7 @@ details p { margin-top: 12px; font-size: 15px; line-height: 1.6; color: var(--b4
   .versus-sticky { top: 68px; }
   .ledger { padding: 4px 18px 18px; }
   .row { font-size: 15px; padding: 11px 0; grid-template-columns: 34px 1fr auto; }
-  .versus.done .row.new { font-size: 17px; padding: 16px 0; }
-  .versus-hint { display: none; }
+  .versus.s3 .row { font-size: 17px; }
   .card-text { padding: 20px 16px; }
   .card-detail { padding: 20px; min-height: 0; }
   .badge { top: 20px; right: 20px; }
@@ -292,5 +297,5 @@ details p { margin-top: 12px; font-size: 15px; line-height: 1.6; color: var(--b4
   .reel-track, .slot-dot { animation: none; }
   .versus { height: auto; }
   .versus-sticky { position: static; height: auto; padding: 100px 0; }
-  .row, .row .t::after, .total-old { transition: none; }
+  .row, .head-old, .head-new { transition: none; }
 }

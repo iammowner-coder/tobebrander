@@ -82,36 +82,35 @@
       </div>
     </section>
 
-    <!-- VERSUS: 스크롤하면 절차와 비용이 지워진다 -->
+    <!-- VERSUS: 들어오면 목록이 타이핑되고, 더 내리면 tobebrander로 바뀐다 -->
     <section id="versus" class="versus">
       <div class="versus-sticky">
         <div class="wrap versus-in">
           <div class="versus-head">
-            <p class="versus-label"><span class="lbl-old">기존 촬영으로 만들면</span><span class="lbl-new">tobebrander로 만들면</span></p>
-            <h2 class="versus-title"><span class="lbl-old">이 모든 절차가<br />필요했습니다</span><span class="lbl-new">업로드하고<br />신청하면 끝</span></h2>
+            <div class="head-old">
+              <p class="versus-label">기존 촬영으로 만들면</p>
+              <h2 class="versus-title">이 모든 절차가<br />필요했습니다</h2>
+            </div>
+            <div class="head-new" aria-hidden="true">
+              <h2 class="versus-brand">tobebrander는</h2>
+            </div>
           </div>
 
           <div class="ledger" id="ledger">
             <ol class="ledger-list">
-              <li class="row old"><span class="n">01</span><span class="t">컨셉 기획 · 시안</span><span class="c" data-cost></span></li>
-              <li class="row old"><span class="n">02</span><span class="t">모델 섭외</span><span class="c" data-cost></span></li>
-              <li class="row old"><span class="n">03</span><span class="t">스튜디오 대관</span><span class="c" data-cost></span></li>
-              <li class="row old"><span class="n">04</span><span class="t">촬영 스태프 · 장비</span><span class="c" data-cost></span></li>
-              <li class="row old"><span class="n">05</span><span class="t">핏 맞추기 · 스타일링</span><span class="c" data-cost></span></li>
-              <li class="row old"><span class="n">06</span><span class="t">촬영 대기 시간</span><span class="c" data-cost></span></li>
-              <li class="row old"><span class="n">07</span><span class="t">보정 · 편집</span><span class="c" data-cost></span></li>
-              <li class="row new"><span class="n">01</span><span class="t">제품 사진 업로드</span><span class="c">✓</span></li>
-              <li class="row new"><span class="n">02</span><span class="t">신청</span><span class="c">✓</span></li>
+              <li class="row" data-text="컨셉 기획 · 시안" data-new="제품 사진 업로드"><span class="n">01</span><span class="t"></span><span class="c"></span></li>
+              <li class="row" data-text="모델 섭외" data-new="신청"><span class="n">02</span><span class="t"></span><span class="c"></span></li>
+              <li class="row fold" data-text="스튜디오 대관"><span class="n">03</span><span class="t"></span><span class="c"></span></li>
+              <li class="row fold" data-text="촬영 스태프 · 장비"><span class="n">04</span><span class="t"></span><span class="c"></span></li>
+              <li class="row fold" data-text="핏 맞추기 · 스타일링"><span class="n">05</span><span class="t"></span><span class="c"></span></li>
+              <li class="row fold" data-text="촬영 대기 시간"><span class="n">06</span><span class="t"></span><span class="c"></span></li>
+              <li class="row fold" data-text="보정 · 편집"><span class="n">07</span><span class="t"></span><span class="c"></span></li>
             </ol>
             <div class="ledger-total">
               <span>합계</span>
-              <span class="total-wrap">
-                <s class="total-old">3,000,000원</s>
-                <b class="total" id="total">3,000,000원</b>
-              </span>
+              <b class="total" id="total">0원</b>
             </div>
           </div>
-          <p class="versus-hint" aria-hidden="true">스크롤해 보세요 ↓</p>
         </div>
       </div>
     </section>
@@ -119,8 +118,8 @@
     <!-- PRICING -->
     <section id="pricing" class="section">
       <div class="wrap center">
-        <h2>옷 한 벌당<br />이만큼 만들어 드립니다</h2>
-        <p class="body">27 S/S 오픈 프로모션 · 12월 한정 가격</p>
+        <h2>간단하게 빠르게 저렴하게.<br />바로 시작해보세요.</h2>
+        <a class="chip" href="#contact">2027 S/S 시즌 프로모션 한정 구좌 <span aria-hidden="true">→</span></a>
       </div>
       <div class="wrap">
         <div class="cards">
@@ -133,7 +132,7 @@
               <div>
                 <h3>이미지 풀패키지</h3>
                 <p class="card-desc">모델 1시간 비용보다 저렴하게.</p>
-                <p class="price"><s>399,000원</s><b>129,000원</b><span>/ 옷 한 벌</span></p>
+                <p class="price"><s>399,000원</s><b>129,000원</b><span>/ 1장</span></p>
               </div>
             </div>
             <div class="card-detail">
@@ -153,7 +152,7 @@
               <div>
                 <h3>시즌 영상 제작</h3>
                 <p class="card-desc">시즌 숏폼 영상을 만들어 드립니다.</p>
-                <p class="price"><s>649,000원</s><b>299,000원</b><span>/ 옷 한 벌</span></p>
+                <p class="price"><s>649,000원</s><b>299,000원</b><span>/ 1장</span></p>
               </div>
             </div>
             <div class="card-detail g5">
@@ -171,7 +170,7 @@
               <div>
                 <h3>콘텐츠 풀패키지</h3>
                 <p class="card-desc">이미지 풀패키지 + 시즌 영상을 한 번에.</p>
-                <p class="price"><s>428,000원</s><b>399,000원</b><span>/ 옷 한 벌</span></p>
+                <p class="price"><s>428,000원</s><b>399,000원</b><span>/ 1장</span></p>
               </div>
             </div>
             <div class="card-detail">
@@ -248,7 +247,7 @@
                 <option>시즌 영상 제작 (299,000원)</option>
               </select>
             </label>
-            <label>옷 수량 (벌)<input name="count" type="number" min="1" value="1" inputmode="numeric" /></label>
+            <label>옷 수량 (장)<input name="count" type="number" min="1" value="1" inputmode="numeric" /></label>
           </div>
           <label>문의 내용 (선택)<textarea name="message" rows="3"></textarea></label>
           <button class="btn btn-full" type="submit">신청하기</button>
