@@ -142,6 +142,57 @@ const sync = () => bar.classList.toggle("show", heroOut && !contactIn);
 new IntersectionObserver(([e]) => { heroOut = !e.isIntersecting; sync(); }).observe(hero);
 new IntersectionObserver(([e]) => { contactIn = e.isIntersecting; sync(); }).observe(contact);
 
+// ----- 장/벌 선택 계산기 -----
+const PACKS = {
+  image: { name: "이미지 팩", price: 129900, unit: "장", per: { cutout: 7, concept: 5, video: 0, items: 1 } },
+  full:  { name: "풀 패키지", price: 399900, unit: "장", per: { cutout: 7, concept: 5, video: 1, items: 1 } },
+  look:  { name: "룩 패키지", price: 499900, unit: "벌", per: { cutout: 14, concept: 10, video: 1, items: 2 } },
+};
+const pick = document.getElementById("pick");
+let mode = "item", qty = 1;
+const currentPack = () => mode === "look" ? "look" : pick.querySelector('input[name="pkg"]:checked').value;
+
+function renderPick() {
+  const key = currentPack(), p = PACKS[key];
+  document.getElementById("qty").textContent = qty;
+  document.getElementById("qty-unit").textContent = p.unit;
+  const lines = [
+    [mode === "look" ? `옷 ${qty}벌` : `옷 ${qty}장`, mode === "look" ? `총 ${p.per.items * qty}장` : ""],
+    [`누끼컷 ${p.per.cutout * qty}컷`, ""],
+    [`모델 컨셉샷 ${p.per.concept * qty}컷`, ""],
+  ];
+  if (p.per.video) lines.push([`시즌 숏폼 영상 ${p.per.video * qty}편`, ""]);
+  document.getElementById("sum-list").innerHTML = lines.map(([a, b]) => `<li>${a}<span>${b}</span></li>`).join("");
+  document.getElementById("sum-total").textContent = won(p.price * qty);
+}
+
+pick.querySelectorAll(".seg-btn").forEach((b) => b.addEventListener("click", () => {
+  mode = b.dataset.mode;
+  pick.querySelectorAll(".seg-btn").forEach((x) => { const on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-selected", on); });
+  pick.querySelectorAll("[data-for]").forEach((el) => (el.hidden = el.dataset.for !== mode));
+  renderPick();
+}));
+pick.querySelectorAll('input[name="pkg"]').forEach((r) => r.addEventListener("change", renderPick));
+pick.querySelectorAll("[data-step]").forEach((b) => b.addEventListener("click", () => {
+  qty = Math.min(99, Math.max(1, qty + Number(b.dataset.step)));
+  renderPick();
+}));
+renderPick();
+
+// 신청 폼: 계산기에서 고른 값을 넘기고, 단위(장/벌)를 맞춘다
+const pkgSelect = document.querySelector('select[name="package"]');
+const countInput = document.querySelector('input[name="count"]');
+const syncUnit = () => {
+  document.getElementById("count-label").textContent = `수량 (${PACKS[pkgSelect.value].unit})`;
+};
+pkgSelect.addEventListener("change", syncUnit);
+document.getElementById("pick-go").addEventListener("click", () => {
+  pkgSelect.value = currentPack();
+  countInput.value = qty;
+  syncUnit();
+});
+syncUnit();
+
 // ----- 신청 폼 -----
 const form = document.getElementById("contact-form");
 const msg = document.getElementById("form-msg");

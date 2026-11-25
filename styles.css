@@ -300,24 +300,42 @@ details p { margin-top: 12px; font-size: 15px; line-height: 1.6; color: var(--b4
   .row, .head-old, .head-new { transition: none; }
 }
 
-/* 단품 메뉴 · 정산 기준 */
-.menu { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 40px; }
-.menu-box { background: var(--b100); border-radius: 24px; padding: 32px; }
-.menu-box h3 { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 16px; }
-.menu-table { width: 100%; border-collapse: collapse; font-size: 15px; }
-.menu-table th, .menu-table td { padding: 14px 0; border-bottom: 1px solid var(--b200); text-align: left; }
-.menu-table tr:last-child th, .menu-table tr:last-child td { border-bottom: 0; }
-.menu-table th { font-weight: 600; }
-.menu-table td { color: var(--b400); padding-left: 12px; white-space: nowrap; }
-.menu-table .amt { text-align: right; color: var(--b800); font-family: var(--en); font-weight: 600; font-variant-numeric: tabular-nums; }
-.menu-table .amt s { color: var(--b500); font-weight: 400; margin-right: 6px; }
-.rules div { padding: 14px 0; border-bottom: 1px solid var(--b200); display: grid; grid-template-columns: 88px 1fr; gap: 12px; }
-.rules div:last-child { border-bottom: 0; }
-.rules dt { font-weight: 600; font-size: 15px; }
-.rules dd { font-size: 14px; line-height: 1.6; color: var(--b400); }
-@media (max-width: 991px) { .menu { grid-template-columns: 1fr; } }
+/* 장/벌 선택 계산기 */
+[hidden] { display: none !important; }
+.pick { margin-top: 40px; background: var(--b100); border-radius: 24px; padding: 32px; }
+.pick-head h3 { font-size: clamp(22px, 2.4vw, 28px); font-weight: 600; letter-spacing: -0.02em; }
+.pick-head p { margin-top: 8px; color: var(--b400); font-size: 15px; }
+.pick-head b { color: var(--b800); }
+.pick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
+.pick-col { background: var(--white); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--b200); border-radius: 12px; padding: 4px; }
+.seg-btn { font: inherit; font-size: 15px; font-weight: 600; border: 0; background: transparent; color: var(--b400); border-radius: 9px; height: 44px; cursor: pointer; }
+.seg-btn.on { background: var(--white); color: var(--b800); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.pick-explain { font-size: 14px; line-height: 1.6; color: var(--b400); }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt { display: flex; align-items: center; gap: 12px; border: 1px solid var(--b200); border-radius: 14px; padding: 16px; cursor: pointer; }
+.opt:has(input:checked) { border-color: var(--b800); }
+.opt input { accent-color: var(--b800); width: 18px; height: 18px; }
+.opt span { display: flex; flex-direction: column; }
+.opt b { font-size: 16px; }
+.opt em { font-style: normal; font-size: 13px; color: var(--b400); }
+.qty { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.qty-label { font-weight: 600; font-size: 15px; }
+.stepper { display: flex; align-items: center; gap: 6px; }
+.stepper button { width: 40px; height: 40px; border-radius: 10px; border: 0; background: var(--b200); font: inherit; font-size: 20px; cursor: pointer; }
+.stepper output { min-width: 36px; text-align: center; font-family: var(--en); font-size: 20px; font-weight: 600; }
+.qty-unit { font-size: 14px; color: var(--b400); margin-right: 6px; }
+.pick-col.sum { background: var(--b800); color: var(--white); }
+.sum-k { font-size: 14px; color: var(--b500); font-weight: 600; }
+.sum-list { list-style: none; }
+.sum-list li { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #2c2c2c; font-size: 15px; }
+.sum-list li span { color: var(--b500); }
+.sum-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: auto; padding-top: 8px; }
+.sum-total span { color: var(--b500); font-size: 15px; }
+.sum-total b { font-family: var(--en); font-size: clamp(30px, 3.6vw, 40px); font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+@media (max-width: 991px) { .pick-grid { grid-template-columns: 1fr; } }
 @media (max-width: 640px) {
-  .menu-box { padding: 22px 18px; }
-  .menu-table .amt s { display: block; margin: 0; }
-  .rules div { grid-template-columns: 1fr; gap: 4px; }
+  .pick { padding: 20px 14px; }
+  .pick-col { padding: 18px; }
+  .seg-btn { font-size: 14px; }
 }
