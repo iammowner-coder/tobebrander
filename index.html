@@ -152,7 +152,7 @@
               </div>
               <div>
                 <h3>풀 패키지</h3>
-                <p class="card-desc">이미지 팩 + 시즌 숏폼 영상을 한 번에.</p>
+                <p class="card-desc">이미지 팩 + 그 옷을 주인공으로 한 시즌 숏폼 영상.</p>
                 <p class="price"><s>868,700원</s><b>399,900원</b><span>/ 1장</span></p>
               </div>
             </div>
@@ -166,66 +166,69 @@
             </div>
           </article>
 
-          <article class="card">
+          <article class="card soon">
+            <span class="badge badge-soon">준비 중</span>
             <div class="card-text">
               <div>
                 <p class="card-num">03</p>
-                <p class="card-en">Look Package</p>
+                <p class="card-en">Lookbook Package</p>
               </div>
               <div>
-                <h3>룩 패키지</h3>
-                <p class="card-desc">상의 · 하의 2장을 한 벌로 맞춰서.</p>
-                <p class="price"><s>1,087,500원</s><b>499,900원</b><span>/ 1벌(2장)</span></p>
+                <h3>룩북 패키지</h3>
+                <p class="card-desc">룩북 전용 구성과 숏폼으로 준비하고 있어요.<br />먼저 문의 주시면 공개 전에 안내해 드립니다.</p>
               </div>
             </div>
             <div class="card-detail">
               <ul class="incl">
-                <li><b>누끼컷 14컷</b><span>2장 × 7컷</span></li>
-                <li><b>함께 입은 모델 컨셉샷 10컷</b><span>2장 × 5컷</span></li>
-                <li><b>시즌 숏폼 영상 1편</b><span>영상 기준가 649,900원</span></li>
+                <li><b>구성</b><span>공개 예정</span></li>
+                <li><b>룩북 전용 숏폼</b><span>공개 예정</span></li>
+                <li><b>가격</b><span>공개 예정</span></li>
               </ul>
+              <a class="btn btn-gray" href="#contact" data-pkg="lookbook">룩북 패키지 사전 문의</a>
             </div>
           </article>
         </div>
-        <p class="note">* 모든 상품은 패키지로만 제공합니다. 할인 전 가격은 구성 요소를 컷 추가 단가와 영상 기준가로 계산한 합계입니다.</p>
+        <p class="note">* 모든 상품은 옷 1장 기준 패키지로 제공합니다. 할인 전 가격은 구성 요소를 컷 추가 단가와 영상 기준가로 계산한 합계입니다.</p>
 
         <div class="pick" id="pick">
           <div class="pick-head">
-            <h3>몇 장? 몇 벌? 이렇게 고르세요</h3>
-            <p>옷 하나씩 맡기면 <b>장</b>, 상의 · 하의를 한 룩으로 맞추면 <b>벌</b>입니다.</p>
+            <h3>옷마다 고르고, 더해 보세요</h3>
+            <p>옷 1장마다 <b>이미지 팩</b> 또는 <b>풀 패키지</b>를 고릅니다. 영상과 컨셉샷은 그 옷을 주인공으로 연출합니다.</p>
           </div>
 
           <div class="pick-grid">
             <div class="pick-col">
-              <div class="seg" role="tablist" aria-label="주문 방식">
-                <button type="button" class="seg-btn on" data-mode="item" role="tab" aria-selected="true">장으로 · 한 장씩</button>
-                <button type="button" class="seg-btn" data-mode="look" role="tab" aria-selected="false">벌로 · 한 룩으로</button>
-              </div>
-              <p class="pick-explain" data-for="item">맡긴 옷 1장이 주인공이고, 나머지 착장은 무난한 기본 코디로 채워 드립니다.</p>
-              <p class="pick-explain" data-for="look" hidden>상의 · 하의 2장을 한 벌로 맞춰, 함께 입은 컨셉샷과 영상을 만들어 드립니다.</p>
-
-              <div class="opts" data-for="item">
-                <label class="opt"><input type="radio" name="pkg" value="image" checked /><span><b>이미지 팩</b><em>129,900원 / 1장</em></span></label>
-                <label class="opt"><input type="radio" name="pkg" value="full" /><span><b>풀 패키지</b><em>399,900원 / 1장 · 영상 포함</em></span></label>
-              </div>
-              <div class="opts" data-for="look" hidden>
-                <label class="opt"><input type="radio" name="pkg-look" value="look" checked /><span><b>룩 패키지</b><em>499,900원 / 1벌(2장) · 영상 포함</em></span></label>
-              </div>
-
-              <div class="qty">
-                <span class="qty-label">수량</span>
+              <div class="line" data-key="image">
+                <div class="line-info">
+                  <b>이미지 팩</b>
+                  <span>누끼 7컷 + 모델 컨셉샷 5컷</span>
+                  <em>1장 더할 때마다 +129,900원</em>
+                </div>
                 <div class="stepper">
-                  <button type="button" data-step="-1" aria-label="수량 줄이기">−</button>
-                  <output id="qty">1</output><span class="qty-unit" id="qty-unit">장</span>
-                  <button type="button" data-step="1" aria-label="수량 늘리기">+</button>
+                  <button type="button" data-step="-1" aria-label="이미지 팩 줄이기">−</button>
+                  <output>0</output><span class="qty-unit">장</span>
+                  <button type="button" data-step="1" aria-label="이미지 팩 늘리기">+</button>
                 </div>
               </div>
+              <div class="line" data-key="full">
+                <div class="line-info">
+                  <b>풀 패키지</b>
+                  <span>이미지 팩 + 시즌 숏폼 영상 1편</span>
+                  <em>1장 더할 때마다 +399,900원</em>
+                </div>
+                <div class="stepper">
+                  <button type="button" data-step="-1" aria-label="풀 패키지 줄이기">−</button>
+                  <output>1</output><span class="qty-unit">장</span>
+                  <button type="button" data-step="1" aria-label="풀 패키지 늘리기">+</button>
+                </div>
+              </div>
+              <p class="pick-free">함께 입힐 옷은 참고 이미지로 보내 주시면 <b>무료</b>로 스타일링해 드려요.</p>
             </div>
 
             <div class="pick-col sum">
               <p class="sum-k">받게 되는 것</p>
               <ul class="sum-list" id="sum-list"></ul>
-              <div class="sum-total"><span>합계</span><b id="sum-total">129,900원</b></div>
+              <div class="sum-total"><span>합계</span><b id="sum-total">399,900원</b></div>
               <a class="btn btn-white btn-full" href="#contact" id="pick-go">이대로 신청하기</a>
             </div>
           </div>
@@ -265,7 +268,7 @@
         </details>
         <details>
           <summary>상의와 하의를 같이 맡기면 가격은 어떻게 되나요?</summary>
-          <p>옷은 아이템 1개를 1장으로 계산합니다. 2장을 한 룩으로 맞추고 싶다면 룩 패키지(499,900원)가 가장 저렴하고, 1장만 맡기시면 나머지 착장은 기본 코디로 채워 드립니다.</p>
+          <p>옷 1장마다 이미지 팩 또는 풀 패키지를 고르시면 됩니다. 영상과 컨셉샷은 고른 옷을 주인공으로 연출하고, 함께 입힐 옷은 참고 이미지로 보내 주시면 무료로 스타일링해 드립니다. 함께 입힌 옷도 누끼와 영상이 필요하면 그 옷도 패키지로 신청해 주세요.</p>
         </details>
         <details>
           <summary>프로모션 가격은 언제까지인가요?</summary>
@@ -295,10 +298,11 @@
               <select name="package">
                 <option value="full">풀 패키지 (399,900원 / 1장)</option>
                 <option value="image">이미지 팩 (129,900원 / 1장)</option>
-                <option value="look">룩 패키지 (499,900원 / 1벌)</option>
+                <option value="mixed">이미지 팩 + 풀 패키지 섞어서</option>
+                <option value="lookbook">룩북 패키지 (준비 중 · 사전 문의)</option>
               </select>
             </label>
-            <label><span id="count-label">수량 (장)</span><input name="count" type="number" min="1" value="1" inputmode="numeric" /></label>
+            <label><span id="count-label">옷 수량 (장)</span><input name="count" type="number" min="1" value="1" inputmode="numeric" /></label>
           </div>
           <label>문의 내용 (선택)<textarea name="message" rows="3"></textarea></label>
           <button class="btn btn-full" type="submit">신청하기</button>

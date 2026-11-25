@@ -339,3 +339,25 @@ details p { margin-top: 12px; font-size: 15px; line-height: 1.6; color: var(--b4
   .pick-col { padding: 18px; }
   .seg-btn { font-size: 14px; }
 }
+
+/* 옷마다 더하는 계산기 */
+.line { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--b200); }
+.line:first-child { padding-top: 4px; }
+.line-info { display: flex; flex-direction: column; gap: 2px; }
+.line-info b { font-size: 17px; }
+.line-info span { font-size: 13px; color: var(--b400); }
+.line-info em { font-style: normal; font-size: 13px; font-weight: 600; color: var(--b800); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.pick-free { font-size: 14px; line-height: 1.6; color: var(--b400); background: var(--b100); border-radius: 12px; padding: 12px 14px; }
+.pick-free b { color: var(--b800); }
+.sum-list li.empty { color: var(--b500); }
+.btn.disabled { opacity: .4; pointer-events: none; }
+
+/* 준비 중 카드 */
+.card.soon { background: var(--white); border: 1.5px dashed var(--b300); }
+.card.soon .card-num, .card.soon h3 { color: var(--b500); }
+.card.soon .card-detail { background: var(--b100); }
+.badge-soon { background: var(--b200); color: var(--b600); }
+@media (max-width: 640px) {
+  .line { flex-direction: column; align-items: flex-start; }
+  .line .stepper { align-self: flex-end; }
+}

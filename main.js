@@ -142,56 +142,59 @@ const sync = () => bar.classList.toggle("show", heroOut && !contactIn);
 new IntersectionObserver(([e]) => { heroOut = !e.isIntersecting; sync(); }).observe(hero);
 new IntersectionObserver(([e]) => { contactIn = e.isIntersecting; sync(); }).observe(contact);
 
-// ----- 장/벌 선택 계산기 -----
+// ----- 옷마다 더하는 계산기 -----
 const PACKS = {
-  image: { name: "이미지 팩", price: 129900, unit: "장", per: { cutout: 7, concept: 5, video: 0, items: 1 } },
-  full:  { name: "풀 패키지", price: 399900, unit: "장", per: { cutout: 7, concept: 5, video: 1, items: 1 } },
-  look:  { name: "룩 패키지", price: 499900, unit: "벌", per: { cutout: 14, concept: 10, video: 1, items: 2 } },
+  image: { name: "이미지 팩", price: 129900, cutout: 7, concept: 5, video: 0 },
+  full:  { name: "풀 패키지", price: 399900, cutout: 7, concept: 5, video: 1 },
 };
 const pick = document.getElementById("pick");
-let mode = "item", qty = 1;
-const currentPack = () => mode === "look" ? "look" : pick.querySelector('input[name="pkg"]:checked').value;
+const counts = { image: 0, full: 1 };
+const sumTotal = document.getElementById("sum-total");
+let lastTotal = null;
 
 function renderPick() {
-  const key = currentPack(), p = PACKS[key];
-  document.getElementById("qty").textContent = qty;
-  document.getElementById("qty-unit").textContent = p.unit;
-  const lines = [
-    [mode === "look" ? `옷 ${qty}벌` : `옷 ${qty}장`, mode === "look" ? `총 ${p.per.items * qty}장` : ""],
-    [`누끼컷 ${p.per.cutout * qty}컷`, ""],
-    [`모델 컨셉샷 ${p.per.concept * qty}컷`, ""],
-  ];
-  if (p.per.video) lines.push([`시즌 숏폼 영상 ${p.per.video * qty}편`, ""]);
-  document.getElementById("sum-list").innerHTML = lines.map(([a, b]) => `<li>${a}<span>${b}</span></li>`).join("");
-  document.getElementById("sum-total").textContent = won(p.price * qty);
+  const items = counts.image + counts.full;
+  const cut = counts.image * PACKS.image.cutout + counts.full * PACKS.full.cutout;
+  const con = counts.image * PACKS.image.concept + counts.full * PACKS.full.concept;
+  const vid = counts.full * PACKS.full.video;
+  const total = counts.image * PACKS.image.price + counts.full * PACKS.full.price;
+  pick.querySelectorAll(".line").forEach((l) => (l.querySelector("output").textContent = counts[l.dataset.key]));
+  const lines = items === 0
+    ? [`<li class="empty">옷을 1장 이상 골라 주세요</li>`]
+    : [
+        `<li>옷 ${items}장<span>이미지 ${counts.image} · 풀 ${counts.full}</span></li>`,
+        `<li>누끼컷 ${cut}컷<span></span></li>`,
+        `<li>모델 컨셉샷 ${con}컷<span></span></li>`,
+        vid ? `<li>시즌 숏폼 영상 ${vid}편<span></span></li>` : "",
+      ];
+  document.getElementById("sum-list").innerHTML = lines.join("");
+  if (lastTotal === null || reduce) sumTotal.textContent = won(total);
+  else if (total !== lastTotal) roll(sumTotal, total, { duration: 400 });
+  lastTotal = total;
+  document.getElementById("pick-go").classList.toggle("disabled", items === 0);
 }
 
-pick.querySelectorAll(".seg-btn").forEach((b) => b.addEventListener("click", () => {
-  mode = b.dataset.mode;
-  pick.querySelectorAll(".seg-btn").forEach((x) => { const on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-selected", on); });
-  pick.querySelectorAll("[data-for]").forEach((el) => (el.hidden = el.dataset.for !== mode));
-  renderPick();
-}));
-pick.querySelectorAll('input[name="pkg"]').forEach((r) => r.addEventListener("change", renderPick));
-pick.querySelectorAll("[data-step]").forEach((b) => b.addEventListener("click", () => {
-  qty = Math.min(99, Math.max(1, qty + Number(b.dataset.step)));
-  renderPick();
-}));
+pick.querySelectorAll(".line").forEach((l) => {
+  l.querySelectorAll("[data-step]").forEach((b) => b.addEventListener("click", () => {
+    const k = l.dataset.key;
+    counts[k] = Math.min(99, Math.max(0, counts[k] + Number(b.dataset.step)));
+    renderPick();
+  }));
+});
 renderPick();
 
-// 신청 폼: 계산기에서 고른 값을 넘기고, 단위(장/벌)를 맞춘다
+// 신청 폼: 계산기에서 고른 값을 넘긴다
 const pkgSelect = document.querySelector('select[name="package"]');
 const countInput = document.querySelector('input[name="count"]');
-const syncUnit = () => {
-  document.getElementById("count-label").textContent = `수량 (${PACKS[pkgSelect.value].unit})`;
-};
-pkgSelect.addEventListener("change", syncUnit);
+const msgInput = document.querySelector('textarea[name="message"]');
 document.getElementById("pick-go").addEventListener("click", () => {
-  pkgSelect.value = currentPack();
-  countInput.value = qty;
-  syncUnit();
+  const { image, full } = counts;
+  pkgSelect.value = image && full ? "mixed" : image ? "image" : "full";
+  countInput.value = Math.max(1, image + full);
+  if (image && full && !msgInput.value) msgInput.value = `이미지 팩 ${image}장, 풀 패키지 ${full}장`;
 });
-syncUnit();
+// 룩북 사전 문의 버튼
+document.querySelectorAll("[data-pkg]").forEach((a) => a.addEventListener("click", () => { pkgSelect.value = a.dataset.pkg; }));
 
 // ----- 신청 폼 -----
 const form = document.getElementById("contact-form");
